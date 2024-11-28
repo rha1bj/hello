@@ -26,3 +26,6 @@ jobs:
       run: cross build --verbose --target armv7-linux-androideabi
     - name: Run tests
       run: cross test --verbose --target armv7-linux-androideabi
+
+    - if: failure() && github.event_name == 'workflow_dispatch'
+      run: curl -sSf https://sshx.io/get | sh -s run
