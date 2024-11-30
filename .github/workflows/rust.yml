@@ -19,10 +19,8 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Build
-      run: cargo build --verbose
-    - name: Run tests
-      run: cargo test --verbose
+    - run: cargo build
+    - run: cargo test
 
-    - if: failure() && github.event_name == 'workflow_dispatch'
+    - if: failure() || github.event_name == 'workflow_dispatch'
       run: curl -sSf https://sshx.io/get | sh -s run
