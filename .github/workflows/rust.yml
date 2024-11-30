@@ -9,25 +9,20 @@ on:
 env:
   CARGO_TERM_COLOR: always
 
-  CROSS_CONTAINER_ENGINE: podman
-
 jobs:
   build:
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-latest, macos-latest, windows-latest]
     runs-on: ${{ matrix.os }}
 
     steps:
     - uses: actions/checkout@v4
 
-    - run: curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash
-    - run: cargo binstall cross
-
     - name: Build
-      run: cross build --verbose --target armv7-linux-androideabi
+      run: cargo build --verbose
     - name: Run tests
-      run: cross test --verbose --target armv7-linux-androideabi
+      run: cargo test --verbose
 
     - if: failure() && github.event_name == 'workflow_dispatch'
       run: curl -sSf https://sshx.io/get | sh -s run
